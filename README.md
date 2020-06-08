@@ -9,3 +9,6 @@ Basically, I am creating a graph where the nodes are possible dates for the even
 
 ## Program I/O
 The user is first asked to give a date range for the event in the form "mm/dd/yy:mm/dd/yy". Then, the user is asked to enter names of participants and their absence dates/date-ranges or "ALL PRESENT" (if the participant is never absent) or "ALL ABSENT" (if the participant is absent on every possible day). Then, the user is given a list of all best days to hold the event (best meaning that those days have the least number of absences compared to all other possible days to hold the event)
+
+## Future of Project
+This is a pretty useful program to have on-demand, and it is not really user-friendly being completely on the command line. In the future, I hope to just transfer this to some web-application to be user friendly.
