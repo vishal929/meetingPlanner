@@ -134,10 +134,9 @@ def getDateTime(enteredDate):
 #if a user is all absent, then they can just be excluded from the graph basically.
 #likewise, if a user is not absent, they can also be excluded from the graph
 def main():
-    while True
     #creating a graph to use
     graph = DateGraph()
-    dateRange = input("Please enter a date range in the format mm/dd/yyyy:mm/dd/yyyy\n")
+    dateRange = input("Please enter a date range for the event in the format mm/dd/yyyy:mm/dd/yyyy\n")
     #removing whitespace from the entire date, if any
     dateRange.replace(" ","")
     #splitting up ending date string and beginning date string
@@ -149,21 +148,24 @@ def main():
     endDate=getDateTime(endDate)
     #list of all usernames entered in this operation
     users=[]
-    print("Please enter the name of a user, then enter their availability in the form ALL ABSENT, NOT ABSENT, ALL ABSENT EXCEPT mm/dd/yyyy,mm/dd/yyyy...,NOT ABSENT EXCEPT mm/dd/yyyy,mm/dd/yyyy..., or just enter dates seperated by a comma. Enter as many users as you wish, when you are finished enter a -.\n")
-    while True
+    print("Now you will be prompted to enter information for each user associated with this event: \n")
+    while True:
         user=input("please enter the person's name. Enter - if you want to stop.")
-        user.strip()
+        user.replace(" ","")
         if (user=="-"):
             break
         else :
             users.append(user)
-        while True
-            dates=input("Please enter either ALL ABSENT, ALL PRESENT, a date range of the form mm/dd/yyyy:mm/dd/yyyy, or an individual date of the form mm/dd/yyyy and hit enter. When you wish to stop please enter - .")
+        while True:
+            dates=input("Please enter either ALL ABSENT, ALL PRESENT, a date range of the form mm/dd/yyyy:mm/dd/yyyy in which the individual WOULD BE ABSENT, or an individual date of the form mm/dd/yyyy in which the individual WOULD BE ABSENT and hit enter. When you wish to stop please enter - .")
             dates.replace(" ","")
             dates.lower()
             if (dates=="allabsent"):
                 #we have to check off all absent
-                graph.addCompletelyAbsentUser(user)
+                graph.addAbsentUser(user)
+                break
+            elif (dates="-"):
+                #then we stop
                 break
             elif (dates=="allpresent"):
                 #we have to check off all present
@@ -182,12 +184,23 @@ def main():
                     datesList = getDateRange(begDate,endDate)
                     for x in datesList:
                         #I need to add the date user pair to the graph
-                        graph.addDateUser(user,x)
-            else :
+                        graph.addUserDate(user,x)
+            elif(dates[2]=="/" and dates[5]=="/"):
                 #then we have an individual date
                 #we should check if this date is valid and then if valid, we add it, else not
                 dates=datetime.date(dates[6,9],dates[0,1],dates[3,4])
                 if (isValidDate(dates,begDate,endDate)):
-                    #then we add this date to the dictionary
-                    usersDatesDictionary[toAdd].append(dates)
-        #now we set up the corresponding "nodes" in the graph
+                    #then we add this date to the graph dictionary
+                    graph.addUserDate(user,dates)
+            else:
+                #then we have some invalid input
+                print("I am sorry, it seems there was an invalid input! Please try again: \n")
+    #now we find the list of the best dates and print them
+    bestDates = graph.getBestDates()
+    #we first print the list of all the users
+    print("Users associated with this event: \n")
+    for x in users:
+        print(x+"\n")
+    #now i print the output of the best dates
+    graph.printBestDates(bestDates)
+
