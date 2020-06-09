@@ -147,21 +147,28 @@ def getDateTime(enteredDate):
 #likewise, if a user is not absent, they can also be excluded from the graph
 def main():
     #creating a graph to use
-    dateRange = input("Please enter a date range for the event in the format mm/dd/yyyy:mm/dd/yyyy\n")
-    #removing whitespace from the entire date, if any
-    dateRange.replace(" ","")
-    #splitting up ending date string and beginning date string
-    dateRange=dateRange.split(":")
-    begDate=dateRange[0]
-    endDate=dateRange[1]
-    #turning our date strings into actual date objects for future usefulness
-    begDate=getDateTime(begDate)
-    endDate=getDateTime(endDate)
-    #creating our date graph with the given date range
-    graph = DateGraph(begDate,endDate)
-    #list of all usernames entered in this operation
-    users=[]
-    print("Now you will be prompted to enter information for each user associated with this event: \n")
+    while True:
+        dateRange = input("Please enter a date range for the event in the format mm/dd/yyyy:mm/dd/yyyy\n")
+        #removing whitespace from the entire date, if any
+        dateRange.replace(" ","")
+        #splitting up ending date string and beginning date string
+        dateRange=dateRange.split(":")
+        begDate=dateRange[0]
+        endDate=dateRange[1]
+        #turning our date strings into actual date objects for future usefulness
+        #exception checking
+        try:
+            begDate=getDateTime(begDate)
+            endDate=getDateTime(endDate)
+        except :
+            print("The date range could not be recognized! Please try again in the format mm/dd/yyyy:mm/dd/yyyy\n")
+            continue
+        #creating our date graph with the given date range
+        graph = DateGraph(begDate,endDate)
+        #list of all usernames entered in this operation
+        users=[]
+        print("Now you will be prompted to enter information for each user associated with this event: \n")
+        break
     while True:
         user=input("please enter the person's name. Enter - if you want to stop.\n")
         user.replace(" ","")
@@ -204,24 +211,36 @@ def main():
                 dates=dates.split(":")
                 start = dates[0]
                 end = dates[1]
-                start = getDateTime(start)
-                end=getDateTime(end)
+                #exception handling
+                try:
+                    start = getDateTime(start)
+                    end=getDateTime(end)
+                except:
+                    print("The date range could not be recognized. Please try again in the format mm/dd/yyyy:mm/dd/yyyy \n")
+                    continue
                 if (isValidDate(start,begDate,endDate) and isValidDate(end,begDate,endDate)):
                     #then i need to add all the dates in this range to the dictionary
                     datesList = getDateRange(start,end)
                     for x in datesList:
                         #I need to add the date user pair to the graph
                         graph.addUserDate(user,x)
+                    userSelectedDate=True
                 else:
                     #then we have some invalid input
                     print("I am sorry, it seems there was an invalid input! Please try again: \n")
             elif(dates[2]=="/" and dates[5]=="/"):
                 #then we have an individual date
                 #we should check if this date is valid and then if valid, we add it, else not
-                dates=getDateTime(dates)
+                #exception handling
+                try:
+                    dates=getDateTime(dates)
+                except:
+                    print("Date could not be recognized. Please try again in the form mm/dd/yyyy \n")
+                    continue
                 if (isValidDate(dates,begDate,endDate)):
                     #then we add this date to the graph dictionary
                     graph.addUserDate(user,dates)
+                    userSelectedDate=True
                 else:
                     print("I am sorry, it seems there was an invalid input! Please try again: \n")
             else:
