@@ -169,21 +169,35 @@ def main():
             break
         else :
             users.append(user)
+            #this is so user cannot select allAbsent or allpresent after picking a date
+            userSelectedDate=False
         while True:
-            dates=input("Please enter either ALL ABSENT, ALL PRESENT, a date range of the form mm/dd/yyyy:mm/dd/yyyy in which the individual WOULD BE ABSENT, or an individual date of the form mm/dd/yyyy in which the individual WOULD BE ABSENT and hit enter. When you wish to stop please enter - .\n")
+            dates=None
+            if (userSelectedDate):
+                dates=input("Please enter an individual date in the form mm/dd/yyyy or a range in the form mm/dd/yyyy:mm/dd/yyyy, or - if you wish to stop entering dates.") 
+            else:
+                dates=input("Please enter either ALL ABSENT, ALL PRESENT, a date range of the form mm/dd/yyyy:mm/dd/yyyy in which the individual WOULD BE ABSENT, or an individual date of the form mm/dd/yyyy in which the individual WOULD BE ABSENT and hit enter. When you wish to stop please enter - .\n")
+
+
             dates.replace(" ","")
             dates.lower()
             if (dates=="allabsent"):
-                #we have to check off all absent
-                graph.addAbsentUser(user)
-                break
+                if (userSelectedDate):
+                    print("I am sorry, it seems there was an invalid input! Please try again: \n")
+                else:
+                    #we have to check off all absent
+                    graph.addAbsentUser(user)
+                    break
             elif (dates=="-"):
                 #then we stop
                 break
             elif (dates=="allpresent"):
-                #we have to check off all present
-                #in other words, do nothing, because all present doesnt really matter
-                break
+                if (userSelectedDate):
+                    print("I am sorry, it seems there was an invalid input! Please try again: \n")
+                else:
+                    #we have to check off all present
+                    #in other words, do nothing, because all present doesnt really matter
+                    break
             elif (len(dates)>10 and dates[10]==":"):
                 #we have a date range
                 #we should check if start date is valid and end date is valid
@@ -198,6 +212,9 @@ def main():
                     for x in datesList:
                         #I need to add the date user pair to the graph
                         graph.addUserDate(user,x)
+                else:
+                    #then we have some invalid input
+                    print("I am sorry, it seems there was an invalid input! Please try again: \n")
             elif(dates[2]=="/" and dates[5]=="/"):
                 #then we have an individual date
                 #we should check if this date is valid and then if valid, we add it, else not
@@ -205,6 +222,8 @@ def main():
                 if (isValidDate(dates,begDate,endDate)):
                     #then we add this date to the graph dictionary
                     graph.addUserDate(user,dates)
+                else:
+                    print("I am sorry, it seems there was an invalid input! Please try again: \n")
             else:
                 #then we have some invalid input
                 print("I am sorry, it seems there was an invalid input! Please try again: \n")
