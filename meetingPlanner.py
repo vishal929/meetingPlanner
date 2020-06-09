@@ -150,7 +150,11 @@ def main():
     while True:
         dateRange = input("Please enter a date range for the event in the format mm/dd/yyyy:mm/dd/yyyy\n")
         #removing whitespace from the entire date, if any
-        dateRange.replace(" ","")
+        dateRange=dateRange.replace(" ","")
+        if (len(dateRange)!=21):
+            print("Date range could not be recognized! Please enter a valid date range in the format mm/dd/yyyy:mm/dd/yyyy\n")
+            continue
+
         #splitting up ending date string and beginning date string
         dateRange=dateRange.split(":")
         begDate=dateRange[0]
@@ -171,7 +175,7 @@ def main():
         break
     while True:
         user=input("please enter the person's name. Enter - if you want to stop.\n")
-        user.replace(" ","")
+        user=user.replace(" ","")
         if (user=="-"):
             break
         else :
@@ -186,8 +190,8 @@ def main():
                 dates=input("Please enter either ALL ABSENT, ALL PRESENT, a date range of the form mm/dd/yyyy:mm/dd/yyyy in which the individual WOULD BE ABSENT, or an individual date of the form mm/dd/yyyy in which the individual WOULD BE ABSENT and hit enter. When you wish to stop please enter - .\n")
 
 
-            dates.replace(" ","")
-            dates.lower()
+            dates=dates.replace(" ","")
+            dates=dates.lower()
             if (dates=="allabsent"):
                 if (userSelectedDate):
                     print("I am sorry, it seems there was an invalid input! Please try again: \n")
@@ -205,7 +209,7 @@ def main():
                     #we have to check off all present
                     #in other words, do nothing, because all present doesnt really matter
                     break
-            elif (len(dates)>10 and dates[10]==":"):
+            elif (len(dates)==21 and dates[10]==":"):
                 #we have a date range
                 #we should check if start date is valid and end date is valid
                 dates=dates.split(":")
