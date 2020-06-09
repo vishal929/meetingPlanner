@@ -167,6 +167,9 @@ def main():
         except :
             print("The date range could not be recognized! Please try again in the format mm/dd/yyyy:mm/dd/yyyy\n")
             continue
+        if (endDate<begDate):
+            print("The ending date is earlier than the starting date! Please enter a valid date range!")
+            continue
         #creating our date graph with the given date range
         graph = DateGraph(begDate,endDate)
         #list of all usernames entered in this operation
