@@ -9,7 +9,7 @@ import datetime
 #dateNode class, which has a date, list of users associated with it, and a degree
 class DateData:
     def __init__(self):
-        self.usersAbsent=[]
+        self.usersAbsent=set()
         self.degree=0
 
 
@@ -23,24 +23,24 @@ class DateGraph:
         for x in listDates:
             self.dates[x]=DateData()
         #list of users that are all present
-        self.completelyPresent=[]
+        self.completelyPresent=set()
         #list of users that are completely absent
-        self.completelyAbsent=[]
+        self.completelyAbsent=set()
     
     #adding a specific node based on user-timedate key pair
     def addUserDate(self,user,timedate):
         #date that the user is absent must be a valid date (guarunteed to exist upon initialization of the graph)
         dataToConsider = self.dates[timedate]
-        dataToConsider.usersAbsent.append(user)
-        dataToConsider.degree+=1
+        dataToConsider.usersAbsent.add(user)
+        dataToConsider.degree=len(dataToConsider.usersAbsent)
         
     #adding a user that is completely absent
     def addAbsentUser(self,user):
-        self.completelyAbsent.append(user)
+        self.completelyAbsent.add(user)
 
     #adding a user that is completely present
     def addPresentUser(self,user):
-        self.completelyPresent.append(user)
+        self.completelyPresent.add(user)
     
     #getting all the users that are absent on a specific date
     def getAbsentUsers(self,timedate):
@@ -173,7 +173,7 @@ def main():
         #creating our date graph with the given date range
         graph = DateGraph(begDate,endDate)
         #list of all usernames entered in this operation
-        users=[]
+        users=set()
         print("Now you will be prompted to enter information for each user associated with this event: \n")
         break
     while True:
@@ -182,7 +182,7 @@ def main():
         if (user=="-"):
             break
         else :
-            users.append(user)
+            users.add(user)
             #this is so user cannot select allAbsent or allpresent after picking a date
             userSelectedDate=False
         while True:
